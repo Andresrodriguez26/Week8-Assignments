@@ -24,6 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 class Item {
+    name;
+    price;
+    description;
+    id;
     constructor(name, price, description) {
         this.name = name;
         this.price = price;
@@ -32,25 +36,48 @@ class Item {
     }
 }
 class User {
+    name;
+    age;
+    _id;
     get id_1() {
         return this._id;
     }
+    // cart: Item[] = []
+    cart = {};
     constructor(name, age) {
         this.name = name;
         this.age = age;
-        this.cart = [];
         this._id = (0, uuid_1.v4)();
     }
+    // addToCart(item:Item): void {
+    //     this.cart.push(item)
+    // }
     addToCart(item) {
-        this.cart.push(item);
+        this.cart[item.name] = item;
     }
-    removeFromCart(item, user) {
-        user.cart = user.cart.filter((cartItem) => cartItem.id !== item.id);
+    // removeFromCart(item:Item, user:User): void {
+    //     user.cart = user.cart.filter((cartItem) => cartItem.id !== item.id)
+    // }
+    removeFromCart() {
+        let itemDelete = rl.question("What item would you like to delete?: ");
+        if (itemDelete in this.cart) {
+            delete this.cart[itemDelete];
+            console.log(`${itemDelete} was removed from your cart `);
+        }
+        else {
+            console.log(`${itemDelete} was not found in your cart, please check your items `);
+        }
     }
+    // printCart(user:User): void {
+    //     console.log(`Your Cart: `)
+    //     user.cart.forEach((itemName) => {
+    //         console.log(`${item.name} with of Price: $${item.price}`)
+    //     })
+    // }
     printCart(user) {
         console.log(`Your Cart: `);
-        user.cart.forEach((item) => {
-            console.log(`${item.name} with of Price: $${item.price}`);
+        Object.values(user.cart).forEach((item) => {
+            console.log(`${item.name} with a price of $${item.price}`);
         });
     }
 }
@@ -93,25 +120,29 @@ function createItem() {
 }
 console.log(createItem());
 //  ------------------------- New Driver ----------------------------
-// driverCode(): void  {
-//     const _user = createUser()
-//     while (true) {
-//         const _response: string = prompt("What would you like to do? add, delete, view ")
-//         if (_response.toLowerCase() == "add") {
-// let newItem = createItem()
-//             _user.addToCart(newItem)
-//         }
-//         else if (_response.toLowerCase() === "delete") {
-//             _user.removeFromCart();
-//         } else if (_response.toLowerCase() == "view") {
-//             _usert.printCart();
-//         } else if (_response.toLowerCase() == "quit") {
-//             break;
-//         } else {
-//             console.log("Please enter a valid response");
-//         }
-//     }
-// }
+function driverCode() {
+    const _user = createUser();
+    while (true) {
+        const _response = rl.question("What would you like to do? add, delete, view ");
+        if (_response.toLowerCase() == "add") {
+            let newItem = createItem();
+            _user.addToCart(newItem);
+        }
+        else if (_response.toLowerCase() == "delete") {
+            _user.removeFromCart();
+        }
+        else if (_response.toLowerCase() == "view") {
+            _user.printCart(_user);
+        }
+        else if (_response.toLowerCase() == "quit") {
+            break;
+        }
+        else {
+            console.log("Please enter a valid response");
+        }
+    }
+}
+console.log(driverCode());
 // ----------------- Driver Code --------------------- // 
 // let user = createUser("Andres Rodriguez", 25)
 // let firstItem = createItem("Apple", 2.99, "Red and Juicy")

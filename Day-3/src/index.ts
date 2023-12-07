@@ -29,8 +29,8 @@ class User {
     //     this.cart.push(item)
     // }
 
-    addToCart(itemName: string, item: Item): void {
-        this.cart[itemName] = item;
+    addToCart(item: Item): void {
+        this.cart[item.name] = item;
     }
     
     // removeFromCart(item:Item, user:User): void {
@@ -51,12 +51,67 @@ class User {
         
     }
     
-    printCart(user:User): void {
-        console.log(`Your Cart: `)
-        user.cart.forEach((item) => {
-            console.log(`${item.name} with of Price: $${item.price}`)
-        })
+    // printCart(user:User): void {
+    //     console.log(`Your Cart: `)
+    //     user.cart.forEach((itemName) => {
+    //         console.log(`${item.name} with of Price: $${item.price}`)
+    //     })
+    // }
+
+    printCart(user: User): void {
+        console.log(`Your Cart: `);
+        Object.values(user.cart).forEach((item) => {
+            console.log(`${item.name} with a price of $${item.price}`);
+        });
     }
+
+    createUser(): User {
+        let name:string = ""
+        let age:number = 0
+     
+        name = rl.question("Please enter the name of the user: ")
+     
+        while(true){ 
+         
+         age = parseInt(rl.question("Enter your age: "))
+         
+         // // Validate age input
+         if (isNaN(age)) {
+             console.log("Invalid age. Please enter a valid number.");
+         }
+     
+         else{
+             break
+         }
+         
+     }
+         return  new User(name, age)
+     }
+
+     createItem(): Item {
+        let name: string = ""
+        let price: number = 0
+        let description: string = ""
+    
+        name = rl.question("Please enter the name of the item: ")
+        description = rl.question("Please enter a description for your item")
+    
+        while(true){ 
+        
+            price = parseInt(rl.question("Enter the price: "))
+    
+            // // Validate age input
+            if (isNaN(price)) {
+                console.log("Invalid price. Please enter a valid price.");
+            }
+        
+            else{
+                break
+            }
+            
+        }
+            return new Item (name, price, description)
+        }
 
 }
 
@@ -64,57 +119,57 @@ import { v4 as uuid } from "uuid"
 import * as rl from 'readline-sync'
 
 
-function createUser(): User {
-   let name:string = ""
-   let age:number = 0
+// function createUser(): User {
+//    let name:string = ""
+//    let age:number = 0
 
-   name = rl.question("Please enter the name of the user: ")
+//    name = rl.question("Please enter the name of the user: ")
 
-   while(true){ 
+//    while(true){ 
     
-    age = parseInt(rl.question("Enter your age: "))
+//     age = parseInt(rl.question("Enter your age: "))
     
-    // // Validate age input
-    if (isNaN(age)) {
-        console.log("Invalid age. Please enter a valid number.");
-    }
+//     // // Validate age input
+//     if (isNaN(age)) {
+//         console.log("Invalid age. Please enter a valid number.");
+//     }
 
-    else{
-        break
-    }
+//     else{
+//         break
+//     }
     
-}
-    return  new User(name, age)
-}
+// }
+//     return  new User(name, age)
+// }
 
-console.log(createUser())
+// console.log(createUser())
 
-function createItem(): Item {
-    let name: string = ""
-    let price: number = 0
-    let description: string = ""
+// function createItem(): Item {
+//     let name: string = ""
+//     let price: number = 0
+//     let description: string = ""
 
-    name = rl.question("Please enter the name of the item: ")
-    description = rl.question("Please enter a description for your item")
+//     name = rl.question("Please enter the name of the item: ")
+//     description = rl.question("Please enter a description for your item")
 
-    while(true){ 
+//     while(true){ 
     
-        price = parseInt(rl.question("Enter the price: "))
+//         price = parseInt(rl.question("Enter the price: "))
 
-        // // Validate age input
-        if (isNaN(price)) {
-            console.log("Invalid price. Please enter a valid price.");
-        }
+//         // // Validate age input
+//         if (isNaN(price)) {
+//             console.log("Invalid price. Please enter a valid price.");
+//         }
     
-        else{
-            break
-        }
+//         else{
+//             break
+//         }
         
-    }
-        return new Item (name, price, description)
-    }
+//     }
+//         return new Item (name, price, description)
+//     }
 
-console.log(createItem())
+// console.log(createItem())
    
 
 //  ------------------------- New Driver ----------------------------
@@ -126,13 +181,13 @@ function driverCode() {
         const _response: string = rl.question("What would you like to do? add, delete, view ")
 
         if (_response.toLowerCase() == "add") {
-                let newItem = createItem()
-            _user.addToCart(newItem, Item)
+                let newItem = _user.createItem()
+            _user.addToCart(newItem)
         }
         else if (_response.toLowerCase() == "delete") {
             _user.removeFromCart();
         } else if (_response.toLowerCase() == "view") {
-            _user.printCart();
+            _user.printCart(_user);
         } else if (_response.toLowerCase() == "quit") {
             break;
         } else {
